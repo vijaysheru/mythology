@@ -1,0 +1,11 @@
+openai
+langchain
+chromadb
+tiktoken
+streamlit
+python-dotenv
+streamlit
+openai>=1.0
+gtts
+PyPDF2
+pandas
