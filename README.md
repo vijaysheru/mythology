@@ -1,5 +1,5 @@
 
-```markdown
+
 # 🕉️ MythOS: Talk to Lord Krishna — AI-Powered Spiritual Guide
 
 [![Streamlit](https://img.shields.io/badge/Built%20With-Streamlit-blue?logo=streamlit)](https://streamlit.io/)
@@ -24,14 +24,6 @@
 - 📁 Upload PDF or CSV with questions and get responses in bulk
 - 🙏 Karma tracker (easter egg!)
 
----
-
-## 📸 Demo Preview
-
-> _Insert screenshots or screen recording GIF here_  
-> (Let me know — I can make one for you!)
-
----
 
 ## 🚀 Tech Stack
 
@@ -114,13 +106,3 @@ streamlit run frontend/app.py
 ## 📄 License
 
 MIT License © [Vijay Sheru](https://github.com/vijaysheru)
-```
-
----
-
-Let me know when it's up! I can now:
-- 🎨 Design a Krishna-themed GitHub banner
-- ☁️ Help you deploy to Streamlit Cloud or Hugging Face Spaces
-- 🧠 Integrate memory using ChromaDB and LangChain
-
-Which one would you like next?
