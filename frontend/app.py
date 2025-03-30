@@ -22,6 +22,8 @@ st.markdown("Ask me anything — from spiritual doubts to life's biggest decisio
 
 # --- Init files ---
 def initialize_files():
+    os.makedirs("memory", exist_ok=True)  # ✅ Ensure folder exists
+
     if not os.path.exists(KARMA_FILE):
         with open(KARMA_FILE, "w") as f:
             json.dump({"karma": 0}, f)
