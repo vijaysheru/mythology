@@ -3,12 +3,16 @@ import os
 import json
 import pandas as pd
 from PyPDF2 import PdfReader
-from gtts import gTTS
+from elevenlabs import generate, save, set_api_key
+from dotenv import load_dotenv
 import tempfile
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from backend.krishna_agent import get_krishna_response
+
+# Load environment variables
+load_dotenv()
 
 # File paths
 KARMA_FILE = "memory/karma.json"
@@ -48,7 +52,7 @@ def log_chat(question, answer):
         history = json.load(f)
     history.append({"question": question, "answer": answer})
     with open(CHAT_HISTORY_FILE, "w") as f:
-        json.dump(history[-20:], f, indent=2)  # keep last 20 chats
+        json.dump(history[-20:], f, indent=2)
 
 def load_past_questions():
     try:
@@ -57,13 +61,26 @@ def load_past_questions():
     except (json.JSONDecodeError, FileNotFoundError):
         return []
 
-
-# --- Text-to-Speech ---
+# --- Text-to-Speech (Krishna Voice) ---
 def play_krishna_voice(text):
-    tts = gTTS(text)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
-        tts.save(tmp.name)
-        st.audio(tmp.name, format="audio/mp3")
+    api_key = os.getenv("ELEVEN_API_KEY")
+    if not api_key:
+        st.warning("⚠️ ELEVEN_API_KEY not set. Cannot generate voice.")
+        return
+
+    set_api_key(api_key)
+
+    try:
+        audio = generate(
+            text=text,
+            voice="Arnold",  # You can try "Antoni", "Matthew", or your cloned voice
+            model="eleven_monolingual_v1"
+        )
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
+            save(audio, tmp.name)
+            st.audio(tmp.name, format="audio/mp3")
+    except Exception as e:
+        st.warning(f"🛑 Voice generation failed: {e}")
 
 # --- Upload handling ---
 def extract_questions(file):
