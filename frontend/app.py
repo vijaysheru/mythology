@@ -4,9 +4,10 @@ import json
 import pandas as pd
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
-from elevenlabs.client import ElevenLabs
 import tempfile
 import sys
+import asyncio
+import edge_tts  # ✅ Free realistic TTS
 
 # Allow backend import
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -14,7 +15,6 @@ from backend.krishna_agent import get_krishna_response
 
 # Load environment variables
 load_dotenv()
-api_key = os.getenv("ELEVEN_API_KEY")  # 🔐 For ElevenLabs TTS
 
 # File paths
 KARMA_FILE = "memory/karma.json"
@@ -60,26 +60,21 @@ def load_past_questions():
     except (json.JSONDecodeError, FileNotFoundError):
         return []
 
-# --- Text-to-Speech (ElevenLabs) ---
+# --- Text-to-Speech (Free Edge-TTS Male Voice) ---
 def play_krishna_voice(text):
-    if not api_key:
-        st.warning("⚠️ ELEVEN_API_KEY not set in environment or secrets.")
-        return
-
     try:
-        client = ElevenLabs(api_key=api_key)
-        audio_stream = client.generate(
-            text=text,
-            voice="Arnold",  # Try "Antoni", "Adam", or custom
-            model="eleven_monolingual_v1",
-            stream=True
-        )
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
-            for chunk in audio_stream:
-                tmp.write(chunk)
-            st.audio(tmp.name, format="audio/mp3")
+        voice = "en-US-GuyNeural"  # ✅ Male English voice
+        output_path = "krishna_speech.mp3"
+
+        async def run_tts():
+            communicate = edge_tts.Communicate(text, voice)
+            await communicate.save(output_path)
+
+        asyncio.run(run_tts())
+        st.audio(output_path, format="audio/mp3")
+
     except Exception as e:
-        st.error(f"🛑 Voice generation failed: {e}")
+        st.warning(f"🛑 Voice generation failed: {e}")
 
 # --- Upload handling ---
 def extract_questions(file):

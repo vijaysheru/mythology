@@ -10,4 +10,5 @@ gtts
 PyPDF2
 pandas
 elevenlabs>=1.5.5
+edge-tts
 
