@@ -3,16 +3,18 @@ import os
 import json
 import pandas as pd
 from PyPDF2 import PdfReader
-from elevenlabs import generate, save, set_api_key
 from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
 import tempfile
 import sys
 
+# Allow backend import
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from backend.krishna_agent import get_krishna_response
 
 # Load environment variables
 load_dotenv()
+api_key = os.getenv("ELEVEN_API_KEY")  # 🔐 For ElevenLabs TTS
 
 # File paths
 KARMA_FILE = "memory/karma.json"
@@ -20,18 +22,15 @@ CHAT_HISTORY_FILE = "memory/chat_history.json"
 
 # Set page config
 st.set_page_config(page_title="MythOS: Talk to Krishna", page_icon="🕉️")
-
 st.title("🕉️ Talk to Lord Krishna")
 st.markdown("Ask me anything — from spiritual doubts to life's biggest decisions.")
 
 # --- Init files ---
 def initialize_files():
-    os.makedirs("memory", exist_ok=True)  # ✅ Ensure folder exists
-
+    os.makedirs("memory", exist_ok=True)
     if not os.path.exists(KARMA_FILE):
         with open(KARMA_FILE, "w") as f:
             json.dump({"karma": 0}, f)
-
     if not os.path.exists(CHAT_HISTORY_FILE):
         with open(CHAT_HISTORY_FILE, "w") as f:
             json.dump([], f)
@@ -61,26 +60,26 @@ def load_past_questions():
     except (json.JSONDecodeError, FileNotFoundError):
         return []
 
-# --- Text-to-Speech (Krishna Voice) ---
+# --- Text-to-Speech (ElevenLabs) ---
 def play_krishna_voice(text):
-    api_key = os.getenv("ELEVEN_API_KEY")
     if not api_key:
-        st.warning("⚠️ ELEVEN_API_KEY not set. Cannot generate voice.")
+        st.warning("⚠️ ELEVEN_API_KEY not set in environment or secrets.")
         return
 
-    set_api_key(api_key)
-
     try:
-        audio = generate(
+        client = ElevenLabs(api_key=api_key)
+        audio_stream = client.generate(
             text=text,
-            voice="Arnold",  # You can try "Antoni", "Matthew", or your cloned voice
-            model="eleven_monolingual_v1"
+            voice="Arnold",  # Try "Antoni", "Adam", or custom
+            model="eleven_monolingual_v1",
+            stream=True
         )
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
-            save(audio, tmp.name)
+            for chunk in audio_stream:
+                tmp.write(chunk)
             st.audio(tmp.name, format="audio/mp3")
     except Exception as e:
-        st.warning(f"🛑 Voice generation failed: {e}")
+        st.error(f"🛑 Voice generation failed: {e}")
 
 # --- Upload handling ---
 def extract_questions(file):
