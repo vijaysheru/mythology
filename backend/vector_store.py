@@ -1,15 +1,30 @@
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.document_loaders import TextLoader
+from langchain.schema import Document
 import os
 
-def get_vector_store():
-    loader = TextLoader("data/gita_cleaned.txt")
-    docs = loader.load()
-    splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-    texts = splitter.split_documents(docs)
-    embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(texts, embeddings, persist_directory="db")
+# Shared vector DB directory
+VECTOR_DB_PATH = "db/user_memory"
+
+# Embeddings
+embedding = OpenAIEmbeddings()
+
+# Initialize Chroma DB
+def get_memory_db():
+    if not os.path.exists(VECTOR_DB_PATH):
+        os.makedirs(VECTOR_DB_PATH, exist_ok=True)
+    return Chroma(persist_directory=VECTOR_DB_PATH, embedding_function=embedding)
+
+# Store Q&A as memory
+def store_memory(question: str, answer: str):
+    vectordb = get_memory_db()
+    text = f"Q: {question}\nA: {answer}"
+    doc = Document(page_content=text, metadata={"source": "user_chat"})
+    vectordb.add_documents([doc])
     vectordb.persist()
-    return vectordb
+
+# Recall top similar memory
+def recall_similar(query: str, top_k=2):
+    vectordb = get_memory_db()
+    results = vectordb.similarity_search(query, k=top_k)
+    return [doc.page_content for doc in results]

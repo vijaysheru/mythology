@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from backend.vector_store import recall_similar, store_memory
+from vector_store import recall_similar, store_memory
 import random
 
 # Together.ai OpenAI-compatible endpoint
