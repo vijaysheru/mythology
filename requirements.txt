@@ -1,25 +1,11 @@
-# Core LLM and API
 openai>=1.0.0
-langchain>=0.1.13
+langchain==0.1.13
+chromadb==0.4.24
+sentence-transformers
 tiktoken
 
-# Memory & Vector DB
-chromadb>=0.4.24
-sentence-transformers
-
-# Web UI
 streamlit
-streamlit-webrtc  # (Optional for voice input)
-
-# Data handling
+python-dotenv
 pandas
 PyPDF2
-
-# Environment config
-python-dotenv
-
-# Text-to-speech (free + optional)
 edge-tts
-
-# (Only if fallback or testing ElevenLabs again)
-# elevenlabs>=1.5.5
