@@ -4,11 +4,10 @@ import json
 import pandas as pd
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
-import tempfile
-import sys
 import asyncio
 import edge_tts  # ✅ Free realistic TTS
-import os
+import sys
+
 # Allow backend import
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from backend.krishna_agent import get_krishna_response
