@@ -1,6 +1,3 @@
-You got it! Here's your **full copy-paste-ready `README.md`** in Markdown — just drop this into your `README.md` file in your GitHub repo root directory:
-
----
 
 ```markdown
 # 🕉️ MythOS: Talk to Lord Krishna — AI-Powered Spiritual Guide
