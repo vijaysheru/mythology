@@ -8,7 +8,7 @@ import tempfile
 import sys
 import asyncio
 import edge_tts  # ✅ Free realistic TTS
-
+import os
 # Allow backend import
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from backend.krishna_agent import get_krishna_response
