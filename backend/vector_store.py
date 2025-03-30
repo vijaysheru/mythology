@@ -7,7 +7,9 @@ import os
 VECTOR_DB_PATH = "db/user_memory"
 
 # Embeddings
-embedding = OpenAIEmbeddings()
+import os
+embedding = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+
 
 # Initialize Chroma DB
 def get_memory_db():
