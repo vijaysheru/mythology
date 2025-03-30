@@ -3,6 +3,13 @@ from backend.gita_quotes import gita_verses
 from backend.vector_store import recall_similar, store_memory
 import random
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from vector_store import recall_similar, store_memory
+
+
 # Together.ai OpenAI-compatible endpoint
 client = OpenAI(
     api_key="cd16f2f3450f5a355254d0b09db4bf18cf2c554bfee1b065dabd8adb1f4cee3c",
