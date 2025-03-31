@@ -1,12 +1,11 @@
+streamlit
 openai
 langchain
 faiss-cpu
 tiktoken
 sentence-transformers
-streamlit
 python-dotenv
 PyPDF2
 pandas
-elevenlabs>=1.5.5
 edge-tts
-faiss-cpu
+elevenlabs>=1.5.5
