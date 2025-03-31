@@ -10,8 +10,7 @@ VECTOR_DB_PATH = "db"
 
 # Initialize Chroma vector store
 def get_memory_db():
-    os.makedirs(VECTOR_DB_PATH, exist_ok=True)
-    return Chroma(persist_directory=VECTOR_DB_PATH, embedding_function=embedding)
+    return Chroma(embedding_function=embedding)  # In-memory only
 
 # Store memory
 def store_memory(question: str, answer: str):
@@ -19,7 +18,6 @@ def store_memory(question: str, answer: str):
     text = f"Q: {question}\nA: {answer}"
     doc = Document(page_content=text)
     vectordb.add_documents([doc])
-    vectordb.persist()
 
 # Recall memory
 def recall_similar(query: str, top_k=2):
