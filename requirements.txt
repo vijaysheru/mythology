@@ -8,3 +8,4 @@ pandas
 python-dotenv
 edge-tts
 openai>=1.0.0
+docarray>=0.32.0
