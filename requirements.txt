@@ -9,3 +9,5 @@ PyPDF2
 pandas
 edge-tts
 elevenlabs>=1.5.5
+chromadb
+sentence-transformers
