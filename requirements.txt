@@ -7,8 +7,3 @@ PyPDF2
 pandas
 python-dotenv
 edge-tts
-openai>=1.0.0
-langchain
-langchain-community
-chromadb
-sentence-transformers
