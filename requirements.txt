@@ -11,3 +11,5 @@ edge-tts
 elevenlabs>=1.5.5
 chromadb
 sentence-transformers
+langchain
+langchain-community

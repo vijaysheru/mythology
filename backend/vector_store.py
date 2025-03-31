@@ -1,5 +1,5 @@
 import os
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma  # ✅ NEW
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.schema import Document
 
